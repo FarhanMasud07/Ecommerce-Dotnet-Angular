@@ -1,4 +1,5 @@
-using Core.Interfaces;
+using Api.Extensions;
+using Api.Middleware;
 using Infrastructure.Data;
 using Infrastructure.Data.SeedData;
 using Microsoft.EntityFrameworkCore;
@@ -9,22 +10,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<StoreContext>(op => 
-    op.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));   // lifetime of this scope of the http request as an http request comes in, it goes to our controller or whatever we're injecting the service into. and then it creates a new intance of this service. once the request is finished, the class that's using the service is disposed of, and also the service will be disposable as well
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());   // this will go ahed and look inside our current domain assemnbly . And register the mapping profiles when our application starts up.
-
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-
+builder.Services.AddApplicationServices(builder.Configuration); // Extensions 
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+app.UseMiddleware<ExceptionMiddleware>();
+app.UseStatusCodePagesWithReExecute("/errors/{0}");
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
