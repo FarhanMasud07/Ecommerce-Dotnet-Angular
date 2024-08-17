@@ -1,5 +1,6 @@
 ﻿using Api.Dtos;
 using Api.Errors;
+using Api.Helpers;
 using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
@@ -21,13 +22,21 @@ namespace Api.Controllers
         private readonly IGenericRepository<ProductBrand> _productBrandsRepository = productBrandsRepository;
 
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetProducts()
+        public async Task<ActionResult<Pagintion<ProductToReturnDto>>> GetProducts(
+            [FromQuery] ProductSpecParams productSpecParams
+        )
         {
-            var spec = new ProductsWithTypesAndBrandsSpecification();
+            var spec = new ProductsWithTypesAndBrandsSpecification(productSpecParams);
+            
+            var countSpec = new ProductsWithFiltersForCountSpecification(productSpecParams);
+
+            var totalItems = await _productsRepository.CountAsync(countSpec);
 
             var products = await _productsRepository.ListAsync(spec);
 
-            return  Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products));
+            var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products);
+            
+            return Ok(new Pagintion<ProductToReturnDto>(productSpecParams.PageIndex, productSpecParams.PageSize,totalItems,data));
       
         }
 

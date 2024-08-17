@@ -16,7 +16,7 @@ namespace Api.Extensions
 
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));   // lifetime of this scope of the http request as an http request comes in, it goes to our controller or whatever we're injecting the service into. and then it creates a new intance of this service. once the request is finished, the class that's using the service is disposed of, and also the service will be disposable as well
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());   // this will go ahed and look inside our current domain assemnbly . And register the mapping profiles when our application starts up.
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());   // this will go ahead and look inside our current domain assemnbly . And register the mapping profiles when our application starts up.
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = actionCotext =>
