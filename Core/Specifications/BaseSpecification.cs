@@ -12,7 +12,6 @@ namespace Core.Specifications
         public BaseSpecification(Expression<Func<T, bool>> critaria)
         {
                 Criteria = critaria;
-            Console.WriteLine(critaria.ToString());
         }
         public Expression<Func<T, bool>> Criteria { get; }
 
