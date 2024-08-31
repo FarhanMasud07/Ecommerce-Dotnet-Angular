@@ -7,7 +7,7 @@ import { Brand } from '../shared/models/brand';
 import { Type } from '../shared/models/type';
 import { ShopParams } from '../shared/models/shopParams';
 import { SharedModule } from '../shared/shared.module';
-import { debounce, debounceTime, take } from 'rxjs';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-shop',

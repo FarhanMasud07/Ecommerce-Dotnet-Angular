@@ -3,6 +3,7 @@ using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 namespace Api.Extensions
 {
@@ -14,7 +15,13 @@ namespace Api.Extensions
                 op.UseSqlite(config.GetConnectionString("DefaultConnection"))
             );
 
+            services.AddSingleton<IConnectionMultiplexer>(c =>
+            {
+                var options = ConfigurationOptions.Parse(config.GetConnectionString("Redis"));
+                return ConnectionMultiplexer.Connect(options);
+            });
 
+            services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));   // lifetime of this scope of the http request as an http request comes in, it goes to our controller or whatever we're injecting the service into. and then it creates a new intance of this service. once the request is finished, the class that's using the service is disposed of, and also the service will be disposable as well
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());   // this will go ahead and look inside our current domain assemnbly . And register the mapping profiles when our application starts up.
             services.Configure<ApiBehaviorOptions>(options =>
