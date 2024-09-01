@@ -9,12 +9,32 @@
     </div>
     <div class="col-6 mt-5">
       <h2>{{ product.name }}</h2>
-      <p class="product-price-font">{{ product.price | currency }}</p>
+      <p class="font-size-style">{{ product.price | currency }}</p>
+
+      <h5 class="text-primary mb-3" *ngIf="quantityInBasket > 0">
+        You have {{ quantityInBasket }} of this item in your basket
+      </h5>
+
       <div class="d-flex justify-content-start align-items-center">
-        <i class="fa fa-minus-circle text-warning me-2 icon-style"></i>
-        <span class="font-weight-bold product-item-font">2</span>
-        <i class="fa fa-plus-circle text-warning ms-2 icon-style"></i>
-        <button class="btn btn-outline-secondary ms-4">Add to cart</button>
+        <i
+          (click)="decrementQuantity()"
+          class="fa fa-minus-circle text-warning me-2 increment-decrement-style"
+        ></i>
+        <span class="font-weight-bold font-size-style">
+          {{ quantity }}
+        </span>
+        <i
+          (click)="incrementQuantity()"
+          class="fa fa-plus-circle text-warning ms-2 increment-decrement-style"
+        >
+        </i>
+        <button
+          class="btn btn-outline-primary ms-4"
+          (click)="updateBasket()"
+          [disabled]="quantity === quantityInBasket"
+        >
+          {{ buttonText }}
+        </button>
       </div>
       <div class="row mt-4">
         <h4>Description</h4>

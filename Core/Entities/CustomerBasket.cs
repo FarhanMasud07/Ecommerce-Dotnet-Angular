@@ -12,6 +12,7 @@
             Id = id;
         }
         public string Id { get; set; }
-        public List<BasketItem> Items { get; set; } = [];
+        public List<BasketItem> Items { get; set; } = []; 
+        public decimal ShippingPrice { get; set; }
     }
 }
