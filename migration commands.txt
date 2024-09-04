@@ -1,0 +1,1 @@
+add-migration IdentityInitial -p Infrastructure -s API -c AppIdentityDbContext -o Identity/Migrations

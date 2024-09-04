@@ -1,5 +1,6 @@
 ﻿using Api.Errors;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -7,6 +8,13 @@ namespace Api.Controllers
     public class BuggyController(StoreContext context) : BaseApiController
     {
         private readonly StoreContext _context = context;
+
+        [HttpGet("testauth")]
+        [Authorize]
+        public ActionResult<string> GetAuthorizeText()
+        {
+            return "Wo0000!!!!";
+        }
 
         [HttpGet("notfound")]
         public ActionResult GetNotFoundRequest()
