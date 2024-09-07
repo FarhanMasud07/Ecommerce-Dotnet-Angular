@@ -3,11 +3,12 @@ import { Component } from '@angular/core';
 import { BasketService } from './basket.service';
 import { SharedModule } from '../shared/shared.module';
 import { BasketItem } from '../shared/models/basket';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-basket',
   standalone: true,
-  imports: [NgIf, AsyncPipe, SharedModule],
+  imports: [NgIf, AsyncPipe, SharedModule, RouterModule],
   templateUrl: './basket.component.html',
   styleUrl: './basket.component.scss',
 })

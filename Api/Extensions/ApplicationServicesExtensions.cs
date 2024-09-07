@@ -50,9 +50,6 @@ namespace Api.Extensions
                     policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
                 });
             });
-
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
             return services;
         }
     }
