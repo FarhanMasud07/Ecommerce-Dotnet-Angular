@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Core.Entities.OrderAggregate;
 using System.Text.Json;
 
 namespace Infrastructure.Data.SeedData
@@ -30,7 +31,14 @@ namespace Infrastructure.Data.SeedData
                 context.Products.AddRange(products);
             }
 
-            if(context.ChangeTracker.HasChanges()) await context.SaveChangesAsync();    
+
+            if (!context.DeliveryMethods.Any())
+            {
+                var deliveryMethodsData = File.ReadAllText("../Infrastructure/Data/SeedData/delivery.json");
+                var methods = JsonSerializer.Deserialize<List<DeliveryMethod>>(deliveryMethodsData);
+                context.DeliveryMethods.AddRange(methods);
+            }
+            if (context.ChangeTracker.HasChanges()) await context.SaveChangesAsync();    
         }
     }
 }

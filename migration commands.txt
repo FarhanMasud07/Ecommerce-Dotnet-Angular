@@ -1,1 +1,3 @@
 add-migration IdentityInitial -p Infrastructure -s API -c AppIdentityDbContext -o Identity/Migrations
+add-migration OrderEntityAdded -p Infrastructure -s API -c StoreContext
+add-migration OrderEntityAdd -p Infrastructure -s API -c StoreContext -o Data/Migrations

@@ -10,5 +10,8 @@ namespace Core.Interfaces
         Task<T> GetEntityWithSpec(ISpacification<T> spec);
         Task<IReadOnlyList<T>> ListAsync(ISpacification<T> spec);
         Task<int> CountAsync(ISpacification<T> spec);
+        void Add(T entity);
+        void Update(T entity);
+        void Delete(T entity);
     }
 }
