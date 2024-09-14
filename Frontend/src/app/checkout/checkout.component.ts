@@ -34,7 +34,6 @@ export class CheckoutComponent {
   }
   ngOnInit(): void {
     this.getAddressFormValues();
-    //this.getDeliveryMethodValue();
   }
   initForm() {
     this.checkoutForm = this.fb.group({
@@ -65,14 +64,4 @@ export class CheckoutComponent {
       },
     });
   }
-
-  // getDeliveryMethodValue() {
-  //   const basket = this.basketService.getCurrentBasketValue();
-  //   if (basket && basket.deliveryMethodId) {
-  //     this.checkoutForm
-  //       .get('deliveryForm')
-  //       ?.get('deliveryMethod')
-  //       ?.patchValue(basket.deliveryMethodId.toString());
-  //   }
-  // }
 }

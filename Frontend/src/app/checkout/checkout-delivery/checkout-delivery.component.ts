@@ -28,11 +28,24 @@ export class CheckoutDeliveryComponent implements OnChanges {
 
   retrieveDeliveryMethods() {
     this.checkoutService.getDeliveryMethods().subscribe({
-      next: (dm) => (this.deliveryMethods = dm),
+      next: (dm) => {
+        this.deliveryMethods = dm;
+        this.getDeliveryMethodValue();
+      },
     });
   }
 
   setShippingPrice(deliveryMethod: DeliveryMethod) {
     this.basketService.setShippingPrice(deliveryMethod);
+  }
+
+  getDeliveryMethodValue() {
+    const basket = this.basketService.getCurrentBasketValue();
+    if (basket && basket.deliveryMetodId) {
+      this.checkoutForm
+        .get('deliveryForm')
+        ?.get('deliveryMethod')
+        ?.patchValue(basket.deliveryMetodId.toString());
+    }
   }
 }
