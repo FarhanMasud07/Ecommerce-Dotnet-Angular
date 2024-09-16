@@ -4,6 +4,7 @@ import { TestErrorComponent } from './core/test-error/test-error.component';
 import { NotFoundComponent } from './core/not-found/not-found.component';
 import { ServerErrorComponent } from './core/server-error/server-error.component';
 import { AuthGuard } from './core/guards/auth.guard';
+import { OrderCompleteGuard } from './core/guards/order-complete.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, data: { breadcrumb: 'Home' } },

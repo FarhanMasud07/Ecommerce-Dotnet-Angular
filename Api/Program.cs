@@ -1,5 +1,6 @@
 using Api.Extensions;
 using Api.Middleware;
+using Api.SignalR;
 using Core.Entities.Identity;
 using Infrastructure.Data;
 using Infrastructure.Data.SeedData;
@@ -13,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// Extensions 
+// Extensions
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddSwaggerDocumentation();
@@ -39,6 +40,10 @@ app.UseAuthentication(); /// Authentication must come before authorization
 app.UseAuthorization();
 
 app.MapControllers();
+
+//app.MapGroup("api").MapIdentityApi<AppUser>(); // api/login
+
+app.MapHub<NotificationHub>("/hub/notifications").RequireAuthorization();
 
 
 using var scope = app.Services.CreateScope();

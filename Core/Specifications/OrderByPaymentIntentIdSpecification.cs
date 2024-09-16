@@ -8,7 +8,8 @@ namespace Core.Specifications
             string paymentIntentId    
         ): base( o => o.PaymentIntentId == paymentIntentId )
         {
-            
+            AddInclude(o => o.OrderItems);
+            AddInclude(o => o.DeliveryMethod);
         }
     }
 }

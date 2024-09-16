@@ -1,4 +1,5 @@
 ﻿using Core.Entities.Identity;
+using Infrastructure.Data;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -21,11 +22,16 @@ namespace Api.Extensions
             });
 
             services.AddIdentityCore<AppUser>(opt =>
-            {
-                // add identity options here
-            })
-            .AddEntityFrameworkStores<AppIdentityDbContext>()
-            .AddSignInManager<SignInManager<AppUser>>();
+                {
+                    // add identity options here
+                })
+                .AddEntityFrameworkStores<AppIdentityDbContext>()
+                .AddSignInManager<SignInManager<AppUser>>();
+
+
+                /*services.AddAuthorization();
+                services.AddIdentityApiEndpoints<AppUser>()
+                        .AddEntityFrameworkStores<AppIdentityDbContext>();*/
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -38,10 +44,14 @@ namespace Api.Extensions
                         ),
                         ValidIssuer = configuration["Token:Issuer"],
                         ValidateIssuer = true,
-                        ValidateAudience = false
+                        ValidateAudience = false,
                     };
                 });
             services.AddAuthorization();
+            services.AddSignalR().AddJsonProtocol(options =>
+            {
+                options.PayloadSerializerOptions.PropertyNamingPolicy = null;
+            });
 
             return services;
         }

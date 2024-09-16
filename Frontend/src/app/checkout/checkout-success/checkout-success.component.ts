@@ -1,20 +1,23 @@
-import { NgIf } from '@angular/common';
-import { Component } from '@angular/core';
-import { Order } from '../../shared/models/order';
-import { Router, RouterModule } from '@angular/router';
+import { CurrencyPipe, DatePipe, NgFor, NgIf } from '@angular/common';
+import { Component, OnDestroy } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { SignalrService } from '../../core/services/signalr.service';
+import { OrdersService } from '../../orders/orders.service';
 
 @Component({
   selector: 'app-checkout-success',
   standalone: true,
-  imports: [NgIf, RouterModule],
+  imports: [NgIf, DatePipe, NgFor, CurrencyPipe, RouterModule],
   templateUrl: './checkout-success.component.html',
   styleUrl: './checkout-success.component.scss',
 })
-export class CheckoutSuccessComponent {
-  order: Order | any;
-
-  constructor(private router: Router) {
-    const navigation = this.router.getCurrentNavigation();
-    this.order = navigation?.extras?.state as Order;
+export class CheckoutSuccessComponent implements OnDestroy {
+  constructor(
+    public signalrService: SignalrService,
+    private orderService: OrdersService
+  ) {}
+  ngOnDestroy(): void {
+    this.orderService.orderComplete = false;
+    this.signalrService.orderSignal.set(null);
   }
 }

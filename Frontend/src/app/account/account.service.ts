@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Address, User } from '../shared/models/user';
-import { map, of, ReplaySubject } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { map, of, ReplaySubject, tap } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { SignalrService } from '../core/services/signalr.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,11 @@ export class AccountService {
   private currentUserSource = new ReplaySubject<User | null>(1);
   currentUser$ = this.currentUserSource.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private signalRService: SignalrService
+  ) {}
 
   loadCurrentUser(token: string | null) {
     if (token === null) {
@@ -37,7 +42,8 @@ export class AccountService {
       map((user) => {
         localStorage.setItem('token', user.token);
         this.currentUserSource.next(user);
-      })
+      }),
+      tap(() => this.signalRService.createHubConnection())
     );
   }
 
@@ -53,6 +59,7 @@ export class AccountService {
   }
 
   logout() {
+    this.signalRService.stopHubConnection();
     localStorage.removeItem('token');
     this.currentUserSource.next(null);
     this.router.navigate(['/']);

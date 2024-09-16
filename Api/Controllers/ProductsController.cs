@@ -21,6 +21,7 @@ namespace Api.Controllers
         private readonly IGenericRepository<ProductType> _productTypesRepository = productTypesRepository;
         private readonly IGenericRepository<ProductBrand> _productBrandsRepository = productBrandsRepository;
 
+        [Cached(600)]
         [HttpGet]
         public async Task<ActionResult<Pagintion<ProductToReturnDto>>> GetProducts(
             [FromQuery] ProductSpecParams productSpecParams
@@ -40,7 +41,7 @@ namespace Api.Controllers
       
         }
 
-
+        [Cached(600)]
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
@@ -55,12 +56,12 @@ namespace Api.Controllers
             return _mapper.Map<Product, ProductToReturnDto>(product);
         }
 
-
+        [Cached(600)]
         [HttpGet("brands")]
         public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
             => Ok(await _productBrandsRepository.ListAllAsync());
 
-
+        [Cached(600)]
         [HttpGet("types")]
         public async Task<ActionResult<IReadOnlyList<ProductType>>> GetProductTypes()
             => Ok(await _productTypesRepository.ListAllAsync());

@@ -3,6 +3,8 @@ import { RouterOutlet } from '@angular/router';
 import { CoreModule } from './core/core.module';
 import { BasketService } from './basket/basket.service';
 import { AccountService } from './account/account.service';
+import { take, tap } from 'rxjs';
+import { SignalrService } from './core/services/signalr.service';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +18,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     private basketService: BasketService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private signalRService: SignalrService
   ) {}
   ngOnInit(): void {
     this.loadBasket();
@@ -29,6 +32,12 @@ export class AppComponent implements OnInit {
   }
   loadCurrentUser() {
     const token = localStorage.getItem('token');
-    this.accountService.loadCurrentUser(token).subscribe();
+    this.accountService
+      .loadCurrentUser(token)
+      .pipe(
+        take(1),
+        tap(() => this.signalRService.createHubConnection())
+      )
+      .subscribe();
   }
 }

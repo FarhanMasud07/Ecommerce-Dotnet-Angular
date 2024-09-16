@@ -1,7 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BasketService } from '../../basket/basket.service';
-import { CheckoutService } from '../checkout.service';
 import { ToastrService } from 'ngx-toastr';
 import { NavigationExtras, Router } from '@angular/router';
 import { Basket } from '../../shared/models/basket';
@@ -18,6 +17,7 @@ import {
   StripeElements,
 } from '@stripe/stripe-js';
 import { firstValueFrom } from 'rxjs';
+import { OrdersService } from '../../orders/orders.service';
 
 @Component({
   selector: 'app-checkout-payment',
@@ -43,7 +43,7 @@ export class CheckoutPaymentComponent implements OnInit {
   cardCvc?: StripeCardCvcElement;
   constructor(
     private basketService: BasketService,
-    private checkoutService: CheckoutService,
+    private orderService: OrdersService,
     private toastr: ToastrService,
     private router: Router
   ) {}
@@ -107,6 +107,7 @@ export class CheckoutPaymentComponent implements OnInit {
       const createdOrder = await this.createOrder(basket);
       const paymentResult = await this.confirmPaymentWithStripe(basket);
       if (paymentResult.paymentIntent) {
+        this.orderService.orderComplete = true;
         this.basketService.deleteBasket(basket);
         const navigationExtras: NavigationExtras = { state: createdOrder };
         this.router.navigate(['checkout/success', navigationExtras]);
@@ -136,7 +137,7 @@ export class CheckoutPaymentComponent implements OnInit {
   private async createOrder(basket: Basket | null) {
     if (!basket) throw new Error('Basket is null');
     const orderToCreate = this.getOrderToCreate(basket);
-    return firstValueFrom(this.checkoutService.createOrder(orderToCreate));
+    return firstValueFrom(this.orderService.createOrder(orderToCreate));
   }
 
   private getOrderToCreate(basket: Basket): OrderToCreate {

@@ -7,7 +7,6 @@ import { CheckoutReviewComponent } from './checkout-review/checkout-review.compo
 import { CheckoutPaymentComponent } from './checkout-payment/checkout-payment.component';
 import { CdkStep } from '@angular/cdk/stepper';
 import { AccountService } from '../account/account.service';
-import { BasketService } from '../basket/basket.service';
 
 @Component({
   selector: 'app-checkout',
@@ -25,11 +24,7 @@ import { BasketService } from '../basket/basket.service';
 export class CheckoutComponent {
   addressInteracted: boolean = false;
   checkoutForm: FormGroup | any;
-  constructor(
-    private fb: FormBuilder,
-    private accountService: AccountService,
-    private basketService: BasketService
-  ) {
+  constructor(private fb: FormBuilder, private accountService: AccountService) {
     this.initForm();
   }
   ngOnInit(): void {

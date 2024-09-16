@@ -25,6 +25,7 @@ namespace Api.Extensions
                 return ConnectionMultiplexer.Connect(options);
             });
 
+            services.AddTransient<IResponseCacheService, ResponseCacheService>();
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IPaymentService, PaymentService>();
@@ -53,7 +54,11 @@ namespace Api.Extensions
             {
                 opt.AddPolicy("CorsPolicy", policy =>
                 {
-                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                    policy.WithOrigins("https://localhost:4200")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
+                          
                 });
             });
             return services;
