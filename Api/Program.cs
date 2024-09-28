@@ -38,7 +38,7 @@ app.UseAuthentication(); /// Authentication must come before authorization
 
 app.UseAuthorization();
 
-app.UseDefaultFiles(); 
+app.UseDefaultFiles();
 
 app.UseStaticFiles();
 
@@ -63,7 +63,8 @@ try
     await identityContext.Database.MigrateAsync();
     await StoreContextSeed.SeedAsync(context);
     await AppIdentityDbContextSeed.SeedUserdAsync(userManager);
-}catch(Exception ex)
+}
+catch (Exception ex)
 {
     logger.LogError(ex, "An error occured during migration");
 }
