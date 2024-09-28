@@ -18,7 +18,7 @@ export class AccountService {
     private http: HttpClient,
     private router: Router,
     private signalRService: SignalrService
-  ) {}
+  ) { }
 
   loadCurrentUser(token: string | null) {
     if (token === null) {
@@ -67,7 +67,7 @@ export class AccountService {
 
   checkEmailExists(email: string) {
     return this.http.get<boolean>(
-      `${this.baseUrl} + account/emailExists?email=${email}`
+      `${this.baseUrl}account/emailExists?email=${email}`
     );
   }
 

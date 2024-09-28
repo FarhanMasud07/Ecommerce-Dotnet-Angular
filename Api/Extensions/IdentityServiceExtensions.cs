@@ -11,7 +11,7 @@ namespace Api.Extensions
     public static class IdentityServiceExtensions
     {
         public static IServiceCollection AddIdentityServices(
-            this IServiceCollection services, 
+            this IServiceCollection services,
             IConfiguration configuration
         )
         {
@@ -19,8 +19,6 @@ namespace Api.Extensions
             {
                 opt.UseSqlite(configuration.GetConnectionString("IdentityConnection"));
             });
-
-            services.AddAuthorization();
             services.AddIdentityCore<AppUser>(opt =>
                 {
                     // add identity options here
@@ -29,9 +27,9 @@ namespace Api.Extensions
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddSignInManager<SignInManager<AppUser>>();
 
-                /*services.AddAuthorization();
-                services.AddIdentityApiEndpoints<AppUser>()
-                        .AddEntityFrameworkStores<AppIdentityDbContext>();*/
+            /*services.AddAuthorization();
+            services.AddIdentityApiEndpoints<AppUser>()
+                    .AddEntityFrameworkStores<AppIdentityDbContext>();*/
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -47,6 +45,8 @@ namespace Api.Extensions
                         ValidateAudience = false,
                     };
                 });
+
+            services.AddAuthorization();
             services.AddSignalR().AddJsonProtocol(options =>
             {
                 options.PayloadSerializerOptions.PropertyNamingPolicy = null;

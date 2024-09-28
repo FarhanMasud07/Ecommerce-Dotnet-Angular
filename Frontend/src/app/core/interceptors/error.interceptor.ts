@@ -13,7 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private router: Router, private toastService: ToastrService) {}
+  constructor(private router: Router, private toastService: ToastrService) { }
 
   intercept(
     request: HttpRequest<unknown>,
@@ -32,8 +32,10 @@ export class ErrorInterceptor implements HttpInterceptor {
             case StatusCode.NotFound:
               this.handleNotFound(error);
               break;
-            default:
+            case StatusCode.InternalServerError:
               this.handleInternalServerError(error);
+              break;
+            default:
               break;
           }
         }
