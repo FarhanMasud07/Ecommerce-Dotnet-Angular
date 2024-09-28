@@ -11,6 +11,7 @@
             Address shipToAddress,
             DeliveryMethod deliveryMethod, 
             decimal subtotal,
+            decimal discount,
             string paymentIntentId
         )
         {
@@ -19,6 +20,7 @@
             DeliveryMethod = deliveryMethod;
             OrderItems = orderItems;
             Subtotal = subtotal;
+            Discount = discount;
             PaymentIntentId = paymentIntentId;
         }
 
@@ -28,12 +30,13 @@
         public DeliveryMethod DeliveryMethod { get; set; }
         public IReadOnlyList<OrderItem> OrderItems { get; set; }
         public decimal Subtotal { get; set; }
+        public decimal Discount { get; set; }
         public OrderStatus Status { get; set; } = OrderStatus.Pending;
         public string PaymentIntentId { get; set; }
 
         public decimal GetTotal()
         {
-            return Subtotal + DeliveryMethod.Price;
+            return Subtotal - Discount  + DeliveryMethod.Price;
         }
     }
 }

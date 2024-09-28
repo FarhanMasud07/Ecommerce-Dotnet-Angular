@@ -72,7 +72,7 @@ namespace Api.Controllers
                     intent = (PaymentIntent)stripeEvent.Data.Object;
                     _logger.LogInformation("Payment Succeeded ", intent.Id);
                     // TODO: update the order wit new status
-                    order = await _paymentService.UpdateOrderPaymentSucceeded(intent.Id);
+                    order = await _paymentService.UpdateOrderPaymentSucceeded(intent.Id, intent.Amount);
 
                     // connection to signalR
                     var connectionId = NotificationHub.GetConnectionIdByEmail(order.BuyerEmail);

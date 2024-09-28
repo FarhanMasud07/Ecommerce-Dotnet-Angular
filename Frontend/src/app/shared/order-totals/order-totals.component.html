@@ -16,9 +16,67 @@
       <strong class="text-muted">Shipping and handling</strong>
       <strong>{{ totals.shipping | currency }}</strong>
     </li>
+
+    <li class="d-flex justify-content-between py-3 border-bottom text-primary">
+      <strong class="text-muted">Shipping and handling</strong>
+      <strong> -{{ totals.discount | currency }}</strong>
+    </li>
+
     <li class="d-flex justify-content-between py-3 border-bottom">
       <strong class="text-muted">Total</strong>
       <strong>{{ totals.total | currency }}</strong>
     </li>
   </ul>
+
+  <div
+    class="container space-y-4 rounded-lg border border-gray-200 bg-white shadow-sm"
+  >
+    <form
+      #form="ngForm"
+      (ngSubmit)="applyCouponCode()"
+      class="space-y-2 flex flex-col p-2"
+    >
+      <label class="mb-2 block text-sm font-mediem text-muted">
+        Do you have a voucher code?
+      </label>
+      <div
+        *ngIf="basketService.basketSource$ | async as basket"
+        class="d-flex align-items-center mb-2"
+      >
+        <i
+          *ngIf="basket?.coupon"
+          class="fa fa-check me-2"
+          style="color: #e95420"
+        ></i>
+        <span *ngIf="basket?.coupon" class="text-muted"
+          >{{ basket?.coupon?.name }} applied</span
+        >
+        <i
+          class="fa fa-trash-o btn btn-outline-primary ms-2"
+          *ngIf="basket?.coupon"
+          (click)="removeCouponCode()"
+        ></i>
+      </div>
+      <label class="text-muted mb-2">Voucher code</label>
+      <ng-container *ngIf="basketService.basketSource$ | async as basket">
+        <div class="">
+          <input
+            [disabled]="!!basket?.coupon"
+            [(ngModel)]="code"
+            name="code"
+            type="text"
+            class="form-control"
+          />
+
+          <button
+            [disabled]="!!basket?.coupon"
+            type="submit"
+            class="btn btn-primary apply-code"
+          >
+            Apply code
+          </button>
+        </div>
+      </ng-container>
+    </form>
+  </div>
 </div>

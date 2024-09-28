@@ -10,13 +10,38 @@
     real store!
   </p>
   <div class="mb-4" style="margin-left: 20px">
-    <p><strong>Buyer Email:</strong> {{ order.buyerEmail }}</p>
-    <p><strong> Delivery Method:</strong> {{ order.deliveryMethod }}</p>
-    <p><strong>Sub Total:</strong> {{ order.subtotal }}</p>
-    <p><strong>Shipping price :</strong> {{ order.shippingPrice }}</p>
-    <p><strong>Total:</strong> {{ order.total }}</p>
-    <p><strong>Status:</strong> {{ order.status }}</p>
-    <p><strong>Order Created: </strong>{{ order.orderDate | date }}</p>
+    <p>
+      <strong>Buyer Email: </strong>
+      <span class="text-muted">{{ order.buyerEmail }}</span>
+    </p>
+    <p>
+      <strong> Delivery Method: </strong
+      ><span class="text-muted">{{ order.deliveryMethod }}</span>
+    </p>
+    <p>
+      <strong>Sub Total: </strong
+      ><span class="text-muted">{{ order.subtotal | currency }}</span>
+    </p>
+    <p>
+      <strong>Discount: </strong
+      ><span class="text-primary">- {{ order.discount | currency }}</span>
+    </p>
+    <p>
+      <strong>Shipping price : </strong
+      ><span class="text-muted"> {{ order.shippingPrice | currency }}</span>
+    </p>
+    <p>
+      <strong>Total: </strong
+      ><span class="text-muted">{{ order.total | currency }}</span>
+    </p>
+    <p>
+      <strong>Status: </strong
+      ><span class="text-muted">{{ order.status }}</span>
+    </p>
+    <p>
+      <strong>Order Created: </strong>
+      <span class="text-muted">{{ order.orderDate | date }}</span>
+    </p>
   </div>
   <button routerLink="/orders/{{ order.id }}" class="btn btn-outline-success">
     View your order

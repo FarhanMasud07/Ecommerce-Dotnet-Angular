@@ -16,11 +16,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Data\SeedData\**" CopyToOutputDirectory="PreserveNewest" />
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
+    <Folder Include="Identity\Migrations\" />
   </ItemGroup>
 
 </Project>

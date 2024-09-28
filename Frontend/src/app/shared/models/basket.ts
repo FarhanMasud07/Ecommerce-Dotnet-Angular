@@ -23,10 +23,19 @@ export class Basket implements Basket {
   id = createId();
   items: BasketItem[] = [];
   shippingPrice = 0;
+  coupon?: Coupon;
 }
 
 export interface BasketTotals {
   shipping: number;
   subtotal: number;
   total: number;
+  discount: number;
 }
+export type Coupon = {
+  name: string;
+  amountOff?: number;
+  percentOff?: number;
+  promotionCode: string;
+  couponId: string;
+};

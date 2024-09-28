@@ -38,21 +38,25 @@ export class SignalrService {
       .catch((err) => console.error('SignalR connection error: ', err));
 
     this.hubConnection.on('OrderCompleteNotification', (order) => {
-      order.buyerEmail = order.BuyerEmail;
-      order.id = order.Id;
-      order.shipToAddress = order.ShipToAddress;
-      order.deliveryMethod = order.DeliveryMethod;
-      order.shippingPrice = order.ShippingPrice;
-      order.subtotal = order.Subtotal;
-      order.total = order.Total;
-      order.status = order.Status;
-      order.orderDate = order.OrderDate;
-      this.orderSignal.set(order);
+      this.setOrder(order);
     });
   }
   stopHubConnection() {
     if (this.hubConnection?.state === HubConnectionState.Connected) {
       this.hubConnection.stop().catch((error) => console.log(error));
     }
+  }
+  setOrder(order: any) {
+    order.buyerEmail = order.BuyerEmail;
+    order.id = order.Id;
+    order.shipToAddress = order.ShipToAddress;
+    order.deliveryMethod = order.DeliveryMethod;
+    order.shippingPrice = order.ShippingPrice;
+    order.subtotal = order.Subtotal;
+    order.total = order.Total;
+    order.status = order.Status;
+    order.orderDate = order.OrderDate;
+    order.discount = order.Discount;
+    this.orderSignal.set(order);
   }
 }

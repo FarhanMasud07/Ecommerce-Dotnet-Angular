@@ -4,6 +4,7 @@ export interface OrderToCreate {
   basketId: string;
   deliveryMethodId: number;
   shipToAddress: Address;
+  discount?: number;
 }
 
 export interface Order {
@@ -15,6 +16,7 @@ export interface Order {
   shippingPrice: number;
   orderItems: OrderItem[];
   subtotal: number;
+  discount?: number;
   total: number;
   status: string;
 }

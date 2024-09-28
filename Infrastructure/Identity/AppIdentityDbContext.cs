@@ -1,7 +1,7 @@
 ﻿using Core.Entities.Identity;
+using Infrastructure.Data.Config;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-
 namespace Infrastructure.Identity
 {
     public class AppIdentityDbContext(
@@ -10,7 +10,8 @@ namespace Infrastructure.Identity
     {
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
+            base.OnModelCreating(builder); 
+            builder.ApplyConfiguration(new RoleConfiguration());
         }
     }
 }

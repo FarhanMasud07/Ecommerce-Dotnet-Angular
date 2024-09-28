@@ -1,5 +1,4 @@
 ﻿using Core.Entities.Identity;
-using Infrastructure.Data;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -21,13 +20,14 @@ namespace Api.Extensions
                 opt.UseSqlite(configuration.GetConnectionString("IdentityConnection"));
             });
 
+            services.AddAuthorization();
             services.AddIdentityCore<AppUser>(opt =>
                 {
                     // add identity options here
                 })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddSignInManager<SignInManager<AppUser>>();
-
 
                 /*services.AddAuthorization();
                 services.AddIdentityApiEndpoints<AppUser>()
@@ -47,7 +47,6 @@ namespace Api.Extensions
                         ValidateAudience = false,
                     };
                 });
-            services.AddAuthorization();
             services.AddSignalR().AddJsonProtocol(options =>
             {
                 options.PayloadSerializerOptions.PropertyNamingPolicy = null;

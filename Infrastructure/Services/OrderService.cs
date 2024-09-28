@@ -16,7 +16,8 @@ namespace Infrastructure.Services
         public async Task<Order> CreateOrderAsync(
             string buyerEmail, 
             int deliveryMethodId,
-            string basketId, 
+            string basketId,
+            decimal discount,
             Address shippingAddress
         )
         {
@@ -53,6 +54,7 @@ namespace Infrastructure.Services
                 order.ShipToAddress = shippingAddress;
                 order.DeliveryMethod = deliveryMethod;
                 order.Subtotal = subTotal;
+                order.Discount = discount;
                 _unitOfWork.Repository<Order>().Update(order);
             } else
             {
@@ -63,6 +65,7 @@ namespace Infrastructure.Services
                     shippingAddress,
                     deliveryMethod,
                     subTotal,
+                    discount,
                     basket.PaymentIntentId
                 );
 

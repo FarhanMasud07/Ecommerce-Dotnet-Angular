@@ -31,7 +31,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerDocumentation();
 }
 
-app.UseStaticFiles();
 
 app.UseCors("CorsPolicy");
 
@@ -39,12 +38,17 @@ app.UseAuthentication(); /// Authentication must come before authorization
 
 app.UseAuthorization();
 
+app.UseDefaultFiles(); 
+
+app.UseStaticFiles();
+
 app.MapControllers();
 
 //app.MapGroup("api").MapIdentityApi<AppUser>(); // api/login
 
 app.MapHub<NotificationHub>("/hub/notifications").RequireAuthorization();
 
+app.MapFallbackToController("Index", "Fallback");
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;

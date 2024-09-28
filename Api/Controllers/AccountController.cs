@@ -7,6 +7,8 @@ using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using StackExchange.Redis;
+using System.Security.Claims;
 
 namespace Api.Controllers
 {
@@ -28,11 +30,15 @@ namespace Api.Controllers
         {
             
             var user = await _userManager.FindEmailFromClaimsPrinciple(User);
+
+            var roles = await _userManager.GetRolesAsync(user);
+
             return new UserDto
             {
                 Email = user.Email,
-                Token = _tokenService.CreateToken(user),
+                Token = _tokenService.CreateToken(user, roles),
                 DisplayName = user.DisplayName,
+                Role = roles
             };
         }
 
@@ -47,11 +53,14 @@ namespace Api.Controllers
 
             if (!result.Succeeded) return Unauthorized(new ApiResponse(401));
 
+            var roles = await _userManager.GetRolesAsync(user);
+
             return new UserDto
             {
                 Email = user.Email,
-                Token = _tokenService.CreateToken(user),
+                Token = _tokenService.CreateToken(user, roles),
                 DisplayName = user.DisplayName,
+                Role = roles
             };
         }
         [HttpPost("register")]
@@ -75,10 +84,30 @@ namespace Api.Controllers
 
             if(!result.Succeeded) return BadRequest(new ApiResponse(400));
 
+            var rolesToAdd = new List<string> { "Customer", "Admin" };
+
+            /*try
+            {
+                foreach (var role in rolesToAdd)
+                {
+                    await _userManager.AddToRoleAsync(user, role);
+                }
+            }
+            catch (Exception ex)
+            {
+                BadRequest(new ApiResponse(404, "Can not add role" + ex));
+            }*/
+
+            var roleToAdd = await _userManager.AddToRoleAsync(user, "Customer");
+
+            if(!roleToAdd.Succeeded) return BadRequest(new ApiResponse(404, "Can not add role"));
+
+            var roles = await _userManager.GetRolesAsync(user);
+
             return new UserDto
             {
                 DisplayName = user.DisplayName,
-                Token = _tokenService.CreateToken(user),
+                Token = _tokenService.CreateToken(user, roles),
                 Email = user.Email,
             };
         }

@@ -2,7 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, map } from 'rxjs';
-import { Basket, BasketItem, BasketTotals } from '../shared/models/basket';
+import {
+  Basket,
+  BasketItem,
+  BasketTotals,
+  Coupon,
+} from '../shared/models/basket';
 import { Product } from '../shared/models/product';
 import { DeliveryMethod } from '../shared/models/deliveryMethod';
 
@@ -89,6 +94,10 @@ export class BasketService {
     });
   }
 
+  applyDiscount(code: string) {
+    return this.http.get<Coupon>(this.baseUrl + 'coupons/' + code);
+  }
+
   deleteLocalBasket() {
     this.basketSource.next(null);
     this.basketTotalSource.next(null);
@@ -129,10 +138,23 @@ export class BasketService {
     const basket = this.getCurrentBasketValue();
     if (!basket) return;
     const subtotal = basket.items.reduce((a, b) => b.price * b.quantity + a, 0);
-    const total = subtotal + basket.shippingPrice;
+
+    let discountValue = 0;
+
+    if (basket.coupon) {
+      if (basket.coupon.amountOff) {
+        discountValue = basket.coupon.amountOff;
+      } else if (basket.coupon.percentOff) {
+        discountValue = subtotal * (basket.coupon.percentOff / 100);
+      }
+    }
+
+    const total = subtotal + basket.shippingPrice - discountValue;
+
     this.basketTotalSource.next({
       shipping: basket.shippingPrice,
       total,
+      discount: discountValue,
       subtotal,
     });
   }

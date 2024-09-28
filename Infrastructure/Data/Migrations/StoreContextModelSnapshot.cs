@@ -52,6 +52,9 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int?>("DeliveryMethodId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<double>("Discount")
+                        .HasColumnType("REAL");
+
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("TEXT");
 

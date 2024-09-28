@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Core.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace Api.Dtos
 {
@@ -11,5 +12,6 @@ namespace Api.Dtos
         public string ClientSecret { get; set; }
         public string PaymentIntentId { get; set; }
         public decimal ShippingPrice { get; set; }
+        public AppCoupon? Coupon { get; set; }
     }
 }

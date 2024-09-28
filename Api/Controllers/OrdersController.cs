@@ -26,6 +26,7 @@ namespace Api.Controllers
                 email,
                 orderDto.DeliveryMethodId,
                 orderDto.BasketId,
+                orderDto.Discount,
                 address
             );
 

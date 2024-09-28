@@ -16,7 +16,7 @@ import {
   StripeCardNumberElement,
   StripeElements,
 } from '@stripe/stripe-js';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { OrdersService } from '../../orders/orders.service';
 
 @Component({
@@ -136,11 +136,11 @@ export class CheckoutPaymentComponent implements OnInit {
   }
   private async createOrder(basket: Basket | null) {
     if (!basket) throw new Error('Basket is null');
-    const orderToCreate = this.getOrderToCreate(basket);
+    const orderToCreate = await this.getOrderToCreate(basket);
     return firstValueFrom(this.orderService.createOrder(orderToCreate));
   }
 
-  private getOrderToCreate(basket: Basket): OrderToCreate {
+  private async getOrderToCreate(basket: Basket): Promise<OrderToCreate> {
     const deliveryMethodId = this.checkoutForm
       ?.get('deliveryForm')
       ?.get('deliveryMethod')?.value;
@@ -149,11 +149,15 @@ export class CheckoutPaymentComponent implements OnInit {
 
     if (!deliveryMethodId || !shipToAddress)
       throw new Error('Problem with basket');
-
     return {
       basketId: basket.id,
       deliveryMethodId: deliveryMethodId,
       shipToAddress: shipToAddress,
+      discount: await this.getDiscount(),
     };
+  }
+  async getDiscount(): Promise<number | undefined> {
+    const res = await firstValueFrom(this.basketService.basketTotalSource$);
+    return res?.discount;
   }
 }

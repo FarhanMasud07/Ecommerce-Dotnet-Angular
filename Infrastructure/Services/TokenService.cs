@@ -1,5 +1,6 @@
 ﻿using Core.Entities.Identity;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,13 +19,18 @@ namespace Infrastructure.Services
                 _config = config;
                 _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:Key"]));
         }
-        public string CreateToken(AppUser user)
+        public string CreateToken(AppUser user, IList<string> roles)
         {
             var claims = new List<Claim>
             { 
                 new(ClaimTypes.Email, user.Email),
                 new(ClaimTypes.GivenName, user.DisplayName),
             };
+
+            foreach(var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 

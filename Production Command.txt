@@ -1,0 +1,2 @@
+drop-database -p Infrastructure -s API -Context StoreContext 
+drop-database -p Infrastructure -s API -Context AppIdentityDbContext
