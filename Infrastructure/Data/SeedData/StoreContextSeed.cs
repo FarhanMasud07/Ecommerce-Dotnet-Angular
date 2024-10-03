@@ -1,5 +1,7 @@
 ﻿using Core.Entities;
+using Core.Entities.Identity;
 using Core.Entities.OrderAggregate;
+using Microsoft.AspNetCore.Identity;
 using System.Reflection;
 using System.Text.Json;
 
@@ -7,13 +9,25 @@ namespace Infrastructure.Data.SeedData
 {
     public class StoreContextSeed
     {
-        public static async Task SeedAsync(StoreContext context)
+        public static async Task SeedAsync(StoreContext context, UserManager<AppUser> userManager)
         {
             var path = Path.GetDirectoryName(
                 Assembly.GetExecutingAssembly().Location
             );
 
-            if(!context.ProductBrands.Any())
+            if (!userManager.Users.Any(x => x.UserName == "admin@test.com"))
+            {
+                var user = new AppUser
+                {
+                    UserName = "admin@test.com",
+                    Email = "admin@test.com",
+                };
+
+                await userManager.CreateAsync(user, "Pa$$w0rd");
+                await userManager.AddToRoleAsync(user, "Admin");
+            }
+
+            if (!context.ProductBrands.Any())
             {
                 var brandsData = File.ReadAllText(path + @"/Data/SeedData/brands.json");
                 var brands = JsonSerializer.Deserialize<List<ProductBrand>>(brandsData);
@@ -43,7 +57,7 @@ namespace Infrastructure.Data.SeedData
                 var methods = JsonSerializer.Deserialize<List<DeliveryMethod>>(deliveryMethodsData);
                 context.DeliveryMethods.AddRange(methods);
             }
-            if (context.ChangeTracker.HasChanges()) await context.SaveChangesAsync();    
+            if (context.ChangeTracker.HasChanges()) await context.SaveChangesAsync();
         }
     }
 }

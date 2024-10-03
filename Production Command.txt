@@ -1,2 +1,6 @@
 drop-database -p Infrastructure -s API -Context StoreContext 
 drop-database -p Infrastructure -s API -Context AppIdentityDbContext
+
+
+
+dotnet publish -c Release -o ./bin/Publish

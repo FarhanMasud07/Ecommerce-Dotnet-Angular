@@ -1,11 +1,13 @@
 ﻿using Core.Entities;
+using Core.Entities.Identity;
 using Core.Entities.OrderAggregate;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace Infrastructure.Data
 {
-    public class StoreContext(DbContextOptions<StoreContext> options) : DbContext(options)
+    public class StoreContext(DbContextOptions<StoreContext> options) : IdentityDbContext<AppUser>(options)
     {
         public DbSet<Product> Products { get; set; }
 
@@ -24,13 +26,13 @@ namespace Infrastructure.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            if(Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite")
+            if (Database.ProviderName == "Microsoft.EntityFrameworkCore.SqlServer")
             {
-                foreach(var entityType in modelBuilder.Model.GetEntityTypes()) 
+                foreach (var entityType in modelBuilder.Model.GetEntityTypes())
                 {
                     var properties = entityType.ClrType.GetProperties().Where(p => p.PropertyType == typeof(decimal));
 
-                    foreach(var property in properties)
+                    foreach (var property in properties)
                     {
                         modelBuilder.Entity(entityType.Name).Property(property.Name).HasConversion<double>();
                     }

@@ -16,8 +16,9 @@ import {
   StripeCardNumberElement,
   StripeElements,
 } from '@stripe/stripe-js';
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { OrdersService } from '../../orders/orders.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-checkout-payment',
@@ -46,11 +47,11 @@ export class CheckoutPaymentComponent implements OnInit {
     private orderService: OrdersService,
     private toastr: ToastrService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     loadStripe(
-      'pk_test_51PyVMWI8zoqmmFVn1Ocu6FX4pdtZj6WHPkZnVEUQ8yExjrMS3xanJdGO5Zu1DCKaL8fdh8CPdEzJqXiJcQT5rSTC00mfbYZBH5'
+      environment.stripePublicKey
     ).then((stripe) => {
       this.stripe = stripe;
       const elements = stripe?.elements();

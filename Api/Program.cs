@@ -4,7 +4,6 @@ using Api.SignalR;
 using Core.Entities.Identity;
 using Infrastructure.Data;
 using Infrastructure.Data.SeedData;
-using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -53,16 +52,13 @@ app.MapFallbackToController("Index", "Fallback");
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 var context = services.GetRequiredService<StoreContext>();
-var identityContext = services.GetRequiredService<AppIdentityDbContext>();
 var userManager = services.GetRequiredService<UserManager<AppUser>>();
 var logger = services.GetRequiredService<ILogger<Program>>();
 
 try
 {
     await context.Database.MigrateAsync();
-    await identityContext.Database.MigrateAsync();
-    await StoreContextSeed.SeedAsync(context);
-    await AppIdentityDbContextSeed.SeedUserdAsync(userManager);
+    await StoreContextSeed.SeedAsync(context, userManager);
 }
 catch (Exception ex)
 {

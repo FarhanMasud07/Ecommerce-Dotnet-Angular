@@ -1,8 +1,7 @@
 ﻿using Core.Entities.Identity;
-using Infrastructure.Identity;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -15,21 +14,12 @@ namespace Api.Extensions
             IConfiguration configuration
         )
         {
-            services.AddDbContext<AppIdentityDbContext>(opt =>
-            {
-                opt.UseSqlite(configuration.GetConnectionString("IdentityConnection"));
-            });
             services.AddIdentityCore<AppUser>(opt =>
                 {
-                    // add identity options here
                 })
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<AppIdentityDbContext>()
+                .AddEntityFrameworkStores<StoreContext>()
                 .AddSignInManager<SignInManager<AppUser>>();
-
-            /*services.AddAuthorization();
-            services.AddIdentityApiEndpoints<AppUser>()
-                    .AddEntityFrameworkStores<AppIdentityDbContext>();*/
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

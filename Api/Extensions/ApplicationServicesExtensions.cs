@@ -11,12 +11,13 @@ namespace Api.Extensions
     public static class ApplicationServicesExtensions
     {
         public static IServiceCollection AddApplicationServices(
-            this IServiceCollection services, 
+            this IServiceCollection services,
             IConfiguration config
         )
         {
+
             services.AddDbContext<StoreContext>(op =>
-                op.UseSqlite(config.GetConnectionString("DefaultConnection"))
+                op.UseSqlServer(config.GetConnectionString("DefaultConnection"))
             );
 
             services.AddSingleton<IConnectionMultiplexer>(c =>
@@ -59,7 +60,7 @@ namespace Api.Extensions
                           .AllowAnyHeader()
                           .AllowAnyMethod()
                           .AllowCredentials();
-                          
+
                 });
             });
             return services;
