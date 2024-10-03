@@ -14,16 +14,17 @@ using Stripe;
 namespace Api.Controllers
 {
     public class PaymentsController(
-        IPaymentService paymentService ,
+        IPaymentService paymentService,
         ILogger<PaymentsController> logger,
         IHubContext<NotificationHub> hubContext,
-        IMapper mapper
+        IMapper mapper,
+        IConfiguration config
     ) : BaseApiController
     {
         private readonly IMapper _mapper = mapper;
         private readonly ILogger<PaymentsController> _logger = logger;
         private readonly IPaymentService _paymentService = paymentService;
-        private const string WhSecret = "whsec_072b61c7a91bf49565bf3ec7d3a56f09ce964406b90238aff387f2fe10f5e37a";
+        private readonly string WhSecret = config["StripeSettings:WhSecret"]!;
 
         [Authorize]
         [HttpPost("{basketId}")]
@@ -76,11 +77,11 @@ namespace Api.Controllers
 
                     // connection to signalR
                     var connectionId = NotificationHub.GetConnectionIdByEmail(order.BuyerEmail);
-                    if(!string.IsNullOrEmpty(connectionId))
+                    if (!string.IsNullOrEmpty(connectionId))
                     {
-                        
+
                         await hubContext.Clients.Client(connectionId)
-                            .SendAsync("OrderCompleteNotification",order.ToDto());
+                            .SendAsync("OrderCompleteNotification", order.ToDto());
                     }
 
                     _logger.LogInformation("Order updated to payment recieved ", order.Id);
@@ -99,7 +100,7 @@ namespace Api.Controllers
         {
             try
             {
-                return EventUtility.ConstructEvent(json, Request.Headers["Stripe-Signature"],WhSecret);
+                return EventUtility.ConstructEvent(json, Request.Headers["Stripe-Signature"], WhSecret);
             }
             catch (Exception ex)
             {
