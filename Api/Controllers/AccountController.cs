@@ -28,7 +28,7 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
-            
+
             var user = await _userManager.FindEmailFromClaimsPrinciple(User);
 
             var roles = await _userManager.GetRolesAsync(user);
@@ -43,7 +43,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<UserDto>> Login(LoginDto loginDto) 
+        public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
 
@@ -66,9 +66,10 @@ namespace Api.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
-            if(CheckEmailExistsAsync(registerDto.Email).Result.Value)
+            if (CheckEmailExistsAsync(registerDto.Email).Result.Value)
             {
-                return new BadRequestObjectResult(new ApiValidationErrorResponse { 
+                return new BadRequestObjectResult(new ApiValidationErrorResponse
+                {
                     Errors = ["Email address is in use"]
                 });
             }
@@ -82,9 +83,9 @@ namespace Api.Controllers
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
-            if(!result.Succeeded) return BadRequest(new ApiResponse(400));
+            if (!result.Succeeded) return BadRequest(new ApiResponse(400));
 
-            var rolesToAdd = new List<string> { "Customer", "Admin" };
+            // var rolesToAdd = new List<string> { "Customer", "Admin" };
 
             /*try
             {
@@ -100,7 +101,7 @@ namespace Api.Controllers
 
             var roleToAdd = await _userManager.AddToRoleAsync(user, "Customer");
 
-            if(!roleToAdd.Succeeded) return BadRequest(new ApiResponse(404, "Can not add role"));
+            if (!roleToAdd.Succeeded) return BadRequest(new ApiResponse(404, "Can not add role"));
 
             var roles = await _userManager.GetRolesAsync(user);
 

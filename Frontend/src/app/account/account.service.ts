@@ -49,7 +49,7 @@ export class AccountService {
 
   register(values: any) {
     return this.http
-      .post<User>(`${this.baseUrl} + account/register`, values)
+      .post<User>(`${this.baseUrl}account/register`, values)
       .pipe(
         map((user) => {
           localStorage.setItem('token', user.token);
