@@ -1,8 +1,4 @@
-<div
-  *ngIf="signalrService.orderSignal() as order"
-  class="container mt-5"
-  style="margin-bottom: 40px"
->
+<div *ngIf="signalrService.orderSignal() as order" class="container mt-5" style="margin-bottom: 40px">
   <div><i class="fa fa-check-circle fa-5x" style="color: green"></i></div>
   <h2>Thank you. Your order is confirmed</h2>
   <p class="mb-4">
@@ -15,28 +11,22 @@
       <span class="text-muted">{{ order.buyerEmail }}</span>
     </p>
     <p>
-      <strong> Delivery Method: </strong
-      ><span class="text-muted">{{ order.deliveryMethod }}</span>
+      <strong> Delivery Method: </strong><span class="text-muted">{{ order.deliveryMethod }}</span>
     </p>
     <p>
-      <strong>Sub Total: </strong
-      ><span class="text-muted">{{ order.subtotal | currency }}</span>
+      <strong>Sub Total: </strong><span class="text-muted">{{ order.subtotal | currency }}</span>
     </p>
     <p>
-      <strong>Discount: </strong
-      ><span class="text-primary">- {{ order.discount | currency }}</span>
+      <strong>Discount: </strong><span class="text-primary">- {{ order.discount | currency }}</span>
     </p>
     <p>
-      <strong>Shipping price : </strong
-      ><span class="text-muted"> {{ order.shippingPrice | currency }}</span>
+      <strong>Shipping price : </strong><span class="text-muted"> {{ order.shippingPrice | currency }}</span>
     </p>
     <p>
-      <strong>Total: </strong
-      ><span class="text-muted">{{ order.total | currency }}</span>
+      <strong>Total: </strong><span class="text-muted">{{ order.total | currency }}</span>
     </p>
     <p>
-      <strong>Status: </strong
-      ><span class="text-muted">{{ order.status }}</span>
+      <strong>Status: </strong><span class="text-muted">{{ order.status }}</span>
     </p>
     <p>
       <strong>Order Created: </strong>
@@ -48,5 +38,5 @@
   </button>
 </div>
 <div *ngIf="!signalrService.orderSignal() as order" class="container mt-5">
-  <p>No Order</p>
+  <p>Order processing... please wait</p>
 </div>
