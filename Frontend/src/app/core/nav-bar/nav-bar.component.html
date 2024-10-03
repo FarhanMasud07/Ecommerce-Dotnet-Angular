@@ -4,7 +4,7 @@
   <nav class="my-2 text-uppercase fs-4">
     <a class="p-2" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
     <a class="p-2" routerLink="/shop" routerLinkActive="active">Shop</a>
-    <a class="p-2" routerLink="/test-error" routerLinkActive="active">Errors</a>
+    <!-- <a class="p-2" routerLink="/test-error" routerLinkActive="active">Errors</a> -->
   </nav>
   <div class="d-flex align-items-center">
     <a routerLink="/basket" class="position-relative">
@@ -15,7 +15,7 @@
     </a>
     <ng-container *ngIf="(accountService.currentUser$ | async) === null">
       <a routerLink="/account/login" class="btn btn-outline-secondary me-2">Login</a>
-      <a routerLink="/account/register" class="btn btn-outline-secondary me-3">Sign up</a>
+      <!-- <a routerLink="/account/register" class="btn btn-outline-secondary me-3">Sign up</a> -->
     </ng-container>
 
     <ng-container *ngIf="accountService.currentUser$ | async as user">
